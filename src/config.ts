@@ -310,6 +310,7 @@ export async function buildConfig(db: D1Database, baseUrl: string) {
 
   return createConfig({
     'log-level': 'warning',
+    // 路由器上开启没用，反正也检测不到局域网上其他进程的信息
     'find-process-mode': 'off',
     'keep-alive-idle': 600,
     'keep-alive-interval': 30,
@@ -329,6 +330,7 @@ export async function buildConfig(db: D1Database, baseUrl: string) {
       'proxy-server-nameserver': ['https://223.5.5.5/dns-query#DIRECT'],
       'nameserver-policy': {
         [geositeRef('geolocation-!cn')]: [
+          // disable-qtype-64=true&disable-qtype-65=true 是为了关闭ech（会导致获取不到域名）
           'https://1.1.1.1/dns-query#节点选择&cs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
           'https://8.8.8.8/dns-query#节点选择&ecs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
         ],
@@ -404,16 +406,23 @@ export async function buildConfig(db: D1Database, baseUrl: string) {
 
     // Rules
     rules: [
+      // 1 自定义规则(最高优先级，发现哪个域名不对及时补充到这里)
       ...rulesets.map((rs) =>
         rs.no_resolve ? ruleSet(rs.name, rs.target, 'no-resolve') : ruleSet(rs.name, rs.target),
       ),
+      // 2 去广告(效果有限，可以去掉)
       geositeRule('category-ads-all', '广告'),
+      // 3 特殊规则（需要配合特殊代理组使用）
+      // FCM推送
       geositeRule('googlefcm', 'FCM推送'),
+      // 国外网络测试
       geositeRule('test-ipv6', '网络测试'),
       geositeRule('category-ip-geo-detect', '网络测试'),
       geositeRule('category-speedtest', '网络测试'),
+      // AIGC
       geositeRule('category-ai-chat-!cn', 'AIGC'),
       geositeRule('category-ai-!cn', 'AIGC'),
+      // 流媒体
       geositeRule('netflix', '流媒体'),
       geositeRule('youtube', '流媒体'),
       geositeRule('disney', '流媒体'),
@@ -421,39 +430,55 @@ export async function buildConfig(db: D1Database, baseUrl: string) {
       geositeRule('primevideo', '流媒体'),
       geositeRule('hbo', '流媒体'),
       geositeRule('apple-tvplus', '流媒体'),
+      // 国外网盘
       geositeRule('pikpak', '网盘'),
       geositeRule('onedrive', '网盘'),
       geositeRule('mega', '网盘'),
       geositeRule('dropbox', '网盘'),
       domainSuffix('drive.usercontent.google.com', '网盘'),
+      // 苹果服务
       geositeRule('apple', '苹果服务'),
+      // 微软服务
       geositeRule('microsoft', '微软服务'),
+      // 谷歌服务
       geositeRule('google', '谷歌服务'),
+      // 地区敏感
       geositeRule('javdb', '禁日本IP'),
       geositeRule('dlsite', '仅限日本IP'),
       geositeRule('dmm', '仅限日本IP'),
       geositeRule('tiktok', '仅限日本IP'),
+      // 4 优先走代理的（尽量少一点，反正最后也是走代理）
       geositeRule('telegram', '节点选择'),
       geositeRule('twitter', '节点选择'),
-      geoipRule('telegram', '节点选择'),
+      // 5 上面该走代理的都走的差不多了
+      // 这里插一个geoip:cloudflare resolve !!!会进行dns解析!!!
       geoipRule('cloudflare', '节点选择'),
+      geoipRule('telegram', '节点选择'),
+      // 6 直连的（尽量多一点，因为保底是走代理的么）
+      // 这三个包含绝大部分了
       geositeRule('private', 'DIRECT'),
       geositeRule('cn', 'DIRECT'),
       geositeRule('geolocation-cn', 'DIRECT'),
+      // steam下载走国内 https://github.com/2dust/v2rayN/issues/1361#issuecomment-1856192253
+      geositeRule('steam@cn', 'DIRECT'),
+      // 国内提供服务的
       geositeRule('apple-cn', 'DIRECT'),
       geositeRule('google-cn', 'DIRECT'),
       geositeRule('cloudflare-cn', 'DIRECT'),
       geositeRule('google@cn', 'DIRECT'),
-      geositeRule('steam@cn', 'DIRECT'),
       geositeRule('apple@cn', 'DIRECT'),
       geositeRule('microsoft@cn', 'DIRECT'),
       geositeRule('icloud@cn', 'DIRECT'),
+      // 国内网络测试
       geositeRule('category-ip-geo-detect@cn', 'DIRECT'),
       geositeRule('category-speedtest@cn', 'DIRECT'),
+      // tracker
       geositeRule('tracker', 'DIRECT'),
+      // 打洞
       geositeRule('category-proxy-tunnels', 'DIRECT'),
       geoipRule('private', 'DIRECT'),
       geoipRule('cn', 'DIRECT'),
+      // 6 兜底
       match('节点选择'),
     ],
 
