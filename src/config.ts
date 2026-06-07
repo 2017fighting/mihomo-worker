@@ -245,8 +245,15 @@ export async function buildConfig(db: D1Database, baseUrl: string) {
   const intAutoName = '内部自动';
   const intNonAutoName = '内部非自动';
 
-  const autoList = [...extAutoNames, intAutoName];
-  const allList = [...extAutoNames, intAutoName, ...extNonAutoNames, intNonAutoName];
+  const hasIntAuto = autoProxies.length > 0 && !!autoToken;
+  const hasIntNonAuto = nonautoProxies.length > 0 && !!nonautoToken;
+  const autoList = [...extAutoNames, ...(hasIntAuto ? [intAutoName] : [])];
+  const allList = [
+    ...extAutoNames,
+    ...(hasIntAuto ? [intAutoName] : []),
+    ...extNonAutoNames,
+    ...(hasIntNonAuto ? [intNonAutoName] : []),
+  ];
 
   // External proxy providers
   const extAutoProviders = Object.fromEntries(
