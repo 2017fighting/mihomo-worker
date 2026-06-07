@@ -174,19 +174,18 @@ function RulesetForm({
         <label>名称</label>
         <input value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <div className="form-group">
-          <label>行为</label>
-          <select value={d.behavior} onChange={(e) => setD({ ...d, behavior: e.target.value })}>
-            <option value="domain">domain</option>
-            <option value="ipcidr">ipcidr</option>
-            <option value="classical">classical</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label>目标</label>
-          <input value={d.target} onChange={(e) => setD({ ...d, target: e.target.value })} />
-        </div>
+      <div className="form-group">
+        <label>行为</label>
+        <select value={d.behavior} onChange={(e) => setD({ ...d, behavior: e.target.value })}>
+          <option value="domain">domain</option>
+          <option value="ipcidr">ipcidr</option>
+          <option value="classical">classical</option>
+        </select>
+      </div>
+      <div className="form-group">
+        <label>目标</label>
+        <input value={d.target} onChange={(e) => setD({ ...d, target: e.target.value })} />
+        <small style={{ color: '#888' }}>允许输入不存在的目标，生成配置时会自动创建对应策略组</small>
       </div>
       <div className="form-group">
         <label>内容</label>
