@@ -185,7 +185,9 @@ function RulesetForm({
       <div className="form-group">
         <label>目标</label>
         <input value={d.target} onChange={(e) => setD({ ...d, target: e.target.value })} />
-        <small style={{ color: '#888' }}>允许输入不存在的目标，生成配置时会自动创建对应策略组</small>
+        <small style={{ color: '#888' }}>
+          允许输入不存在的目标，生成配置时会自动创建对应策略组
+        </small>
       </div>
       <div className="form-group">
         <label>内容</label>

@@ -52,12 +52,19 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/admin/*" element={<Layout><Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/proxy-urls" element={<ProxyUrls />} />
-          <Route path="/proxies" element={<Proxies />} />
-          <Route path="/rulesets" element={<Rulesets />} />
-        </Routes></Layout>} />
+        <Route
+          path="/admin/*"
+          element={
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/proxy-urls" element={<ProxyUrls />} />
+                <Route path="/proxies" element={<Proxies />} />
+                <Route path="/rulesets" element={<Rulesets />} />
+              </Routes>
+            </Layout>
+          }
+        />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Routes>
     </BrowserRouter>
