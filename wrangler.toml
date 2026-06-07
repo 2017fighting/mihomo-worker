@@ -1,0 +1,13 @@
+name = "mihomo-config-worker"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mihomo-db"
+database_id = "0f44589a-62a3-409e-95e0-b9f4f28cc1c0"
+
+[assets]
+directory = "./frontend/dist"
+binding = "ASSETS"
+not_found_handling = "none"

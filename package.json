@@ -1,0 +1,28 @@
+{
+  "name": "mihomo-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build:frontend && wrangler dev",
+    "deploy": "npm run build:frontend && wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "build:frontend": "rm -rf frontend/dist && npm --prefix frontend run build"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "printWidth": 100
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250522.0",
+    "prettier": "^3.8.3",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.0.0"
+  },
+  "dependencies": {
+    "mihomo-config": "^0.1.1"
+  }
+}
