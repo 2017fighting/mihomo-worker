@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import ProxyUrls from './pages/ProxyUrls';
 import Proxies from './pages/Proxies';
@@ -50,15 +50,16 @@ function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <BrowserRouter basename="/admin">
-      <Layout>
-        <Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/admin/*" element={<Layout><Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/proxy-urls" element={<ProxyUrls />} />
           <Route path="/proxies" element={<Proxies />} />
           <Route path="/rulesets" element={<Rulesets />} />
-        </Routes>
-      </Layout>
+        </Routes></Layout>} />
+        <Route path="*" element={<Navigate to="/admin" replace />} />
+      </Routes>
     </BrowserRouter>
   );
 }
