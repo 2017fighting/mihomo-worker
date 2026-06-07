@@ -5,10 +5,10 @@ import Proxies from './pages/Proxies';
 import Rulesets from './pages/Rulesets';
 
 const navItems = [
-  { path: '/', label: '总览' },
-  { path: '/proxy-urls', label: '订阅管理' },
-  { path: '/proxies', label: '代理节点' },
-  { path: '/rulesets', label: '规则集' },
+  { path: '/admin', label: '总览' },
+  { path: '/admin/proxy-urls', label: '订阅管理' },
+  { path: '/admin/proxies', label: '代理节点' },
+  { path: '/admin/rulesets', label: '规则集' },
 ];
 
 function Layout({ children }: { children: React.ReactNode }) {

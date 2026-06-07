@@ -120,7 +120,7 @@ export default {
       if (adminResponse) return adminResponse;
 
       // /admin/* — SPA: always serve index.html
-      if (request.method === 'GET' && path.startsWith('/admin')) {
+      if (request.method !== 'POST' && path.startsWith('/admin')) {
         return env.ASSETS.fetch(new Request(new URL('/', url.origin), request));
       }
       return new Response('Not found', { status: 404 });
