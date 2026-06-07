@@ -3,8 +3,7 @@ import { getProxies, createProxy, updateProxy, deleteProxy, type Proxy } from '.
 
 function proxyToYaml(p: Proxy): string {
   const cfg = JSON.parse(p.config || '{}');
-  const { uuid, ...safe } = cfg;
-  const all = { name: p.name, type: p.proto, server: p.server, port: p.port, ...safe };
+  const all = { name: p.name, type: p.proto, server: p.server, port: p.port, ...cfg };
   const lines = ['- name: ' + all.name];
   for (const [k, v] of Object.entries(all)) {
     if (k === 'name') continue;
