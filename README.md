@@ -2,6 +2,13 @@
 
 Cloudflare Worker that dynamically generates [mihomo (Clash Meta)](https://github.com/MetaCubeX/mihomo) proxy configuration as YAML over HTTP. Configuration is managed through a D1 database with a React SPA admin panel.
 
+## Preview
+
+![Home](./images/home.png)
+![proxy-providers](./images/proxy-providers.png)
+![proxies](./images/proxies.png)
+![rulesets](./images/rulesets.png)
+
 ## How It Works
 
 ```
