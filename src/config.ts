@@ -203,9 +203,9 @@ function geoipRule(name: string, proxy: string, noResolve?: string) {
   return noResolve ? ruleSet(`geoip_${name}`, proxy, noResolve) : ruleSet(`geoip_${name}`, proxy);
 }
 
-function geositeRef(name: string) {
-  geositeProviders.add(name);
-  return `rule-set:geosite_${name}`;
+function geositeRef(...names: string[]) {
+  for (const name of names) geositeProviders.add(name);
+  return `rule-set:${names.map((n) => `geosite_${n}`).join(',')}`;
 }
 
 // --- Helpers for dynamic config from D1 ---
@@ -332,14 +332,23 @@ export async function buildConfig(db: D1Database, baseUrl: string) {
       'respect-rules': false,
       listen: '0.0.0.0:1053',
       'enhanced-mode': 'redir-host',
-      'default-nameserver': ['114.114.114.114'],
-      nameserver: ['https://120.53.53.53/dns-query#DIRECT', 'https://223.5.5.5/dns-query#DIRECT'],
-      'proxy-server-nameserver': ['https://223.5.5.5/dns-query#DIRECT'],
+      'default-nameserver': [
+        'https://120.53.53.53/dns-query#DIRECT',
+        'https://223.5.5.5/dns-query#DIRECT',
+      ],
+      nameserver: [
+        // disable-qtype-64=true&disable-qtype-65=true 是为了关闭ech（会导致获取不到域名）
+        'https://one.one.one.one/dns-query#节点选择&cs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
+        'https://dns.google/dns-query#节点选择&ecs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
+      ],
+      'proxy-server-nameserver': [
+        'https://doh.pub/dns-query#DIRECT',
+        'https://dns.alidns.com/dns-query#DIRECT',
+      ],
       'nameserver-policy': {
-        [geositeRef('geolocation-!cn')]: [
-          // disable-qtype-64=true&disable-qtype-65=true 是为了关闭ech（会导致获取不到域名）
-          'https://1.1.1.1/dns-query#节点选择&cs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
-          'https://8.8.8.8/dns-query#节点选择&ecs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
+        [geositeRef('cn', 'private')]: [
+          'https://doh.pub/dns-query#DIRECT',
+          'https://dns.alidns.com/dns-query#DIRECT',
         ],
       },
     }),
