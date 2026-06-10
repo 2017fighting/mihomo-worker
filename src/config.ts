@@ -338,19 +338,17 @@ export async function buildConfig(db: D1Database, baseUrl: string) {
       ],
       nameserver: [
         // disable-qtype-64=true&disable-qtype-65=true 是为了关闭ech（会导致获取不到域名）
-        'https://one.one.one.one/dns-query#节点选择&cs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
-        'https://dns.google/dns-query#节点选择&ecs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
+        'https://1.1.1.1/dns-query#节点选择&cs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
+        'https://8.8.8.8/dns-query#节点选择&ecs=120.244.157.22/24&ecs-override=true&disable-qtype-64=true&disable-qtype-65=true',
       ],
       'proxy-server-nameserver': [
-        'https://doh.pub/dns-query#DIRECT',
-        'https://dns.alidns.com/dns-query#DIRECT',
+        'https://223.5.5.5/dns-query#DIRECT',
+        'https://120.53.53.53/dns-query#DIRECT',
       ],
-      'nameserver-policy': {
-        [geositeRef('cn', 'private')]: [
-          'https://doh.pub/dns-query#DIRECT',
-          'https://dns.alidns.com/dns-query#DIRECT',
-        ],
-      },
+      'direct-nameserver': [
+        'https://223.5.5.5/dns-query#DIRECT',
+        'https://120.53.53.53/dns-query#DIRECT',
+      ],
     }),
 
     // Sniffer
